@@ -1,8 +1,8 @@
 # PROJECT:  moz-cop22
 # AUTHOR:   K. Srikanth | USAID
-# PURPOSE:  Review MOZ DP
+# PURPOSE:  Review MOZ approval memo
 # LICENSE:  MIT
-# DATE:     2022-03-02
+# DATE:     2022-05-11
 # UPDATED:  
 
 
