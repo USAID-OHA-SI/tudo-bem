@@ -42,10 +42,12 @@ df_dp %>%
   clean_indicator() %>% 
   filter(fiscal_year == 2024) %>% 
   group_by(fiscal_year, indicator
-           , snuprioritization
-) %>% 
+           #, snuprioritization
+  ) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+  ungroup() %>% 
+  #  filter(snuprioritization == "2 - Scale-up: Aggressive") %>% 
+  View()
 
 #check cascade indics
 df_dp %>% 
@@ -59,9 +61,12 @@ df_dp %>%
                                   TRUE ~ ageasentered)) %>% 
   group_by(fiscal_year, indicator,trendscoarse
            , snuprioritization
-           ) %>% 
+  ) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+  ungroup() %>%
+  filter(!is.na(trendscoarse)) %>% 
+  filter(snuprioritization == "2 - Scale-up: Aggressive") %>% 
+  View()
 
 #PMTCT
 df_dp %>% 
@@ -71,10 +76,14 @@ df_dp %>%
   mutate(trendscoarse = case_when(ageasentered %in% c("<01", "01-09", "10-14") ~ "<15",
                                   ageasentered %in% c("15-24", "25-34", "35-49", "50+") ~ "15+")) %>% 
   group_by(fiscal_year, indicator,trendscoarse, 
-           snuprioritization,
-           statushiv) %>% 
+           # snuprioritization
+           statushiv
+  ) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+  ungroup() %>% 
+  filter(!is.na(trendscoarse)) %>% 
+  # filter(snuprioritization == "2 - Scale-up: Aggressive") %>% 
+  View()
 
 #ovc
 df_dp %>% 
@@ -84,8 +93,8 @@ df_dp %>%
   mutate(trendscoarse = case_when(ageasentered %in% c("<01", "01-04", "05-09", "10-14", "15-17") ~ "<18",
                                   TRUE ~ ageasentered)) %>% 
   group_by(fiscal_year, indicator,trendscoarse
-           , snuprioritization
-           ) %>% 
+           # , snuprioritization
+  ) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
   ungroup() %>% View()
 
@@ -96,7 +105,14 @@ df_dp_mech %>%
   filter(fiscal_year == 2024) %>% 
   group_by(fiscal_year, indicator, funding_agency) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+  ungroup() %>% 
+  pivot_wider(names_from = "funding_agency", values_from = "targets") %>% 
+  # filter(!is.na(trendscoarse)) %>% 
+  View()
+
+level_fac <- c("TX_NEW", "TX_CURR", "TX_PVLS_D", "TX_PVLS",
+               "HTS_SELF", "HTS_INDEX", "HTS_TST", "HTS_TST_POS", "TB_STAT", "TB_STAT_D", "TB_ART",
+               "TB_PREV", "TX_TB_D")
 
 df_dp_mech %>% 
   clean_indicator() %>% 
@@ -110,8 +126,12 @@ df_dp_mech %>%
   group_by(fiscal_year, indicator,trendscoarse
            , funding_agency
   ) %>% 
-  summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+  summarise(across(c(targets), sum, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = "funding_agency", values_from = "targets") %>% 
+  filter(!is.na(trendscoarse)) %>% 
+  arrange(factor(indicator, levels = level_fac)) %>% 
+  View()
 
 #PMTCT
 df_dp_mech %>% 
@@ -121,10 +141,14 @@ df_dp_mech %>%
   mutate(trendscoarse = case_when(ageasentered %in% c("<01", "01-09", "10-14") ~ "<15",
                                   ageasentered %in% c("15-24", "25-34", "35-49", "50+") ~ "15+")) %>% 
   group_by(fiscal_year, indicator,trendscoarse, 
-           funding_agency,
-           statushiv) %>% 
-  summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+           funding_agency
+           ,
+           statushiv
+  ) %>% 
+  summarise(across(c(targets), sum, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = "funding_agency", values_from = "targets") %>% 
+  filter(!is.na(trendscoarse)) %>% View()
 
 #ovc
 df_dp_mech %>% 
@@ -137,7 +161,9 @@ df_dp_mech %>%
            , funding_agency
   ) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
-  ungroup() %>% View()
+  ungroup() %>% 
+  pivot_wider(names_from = "funding_agency", values_from = "targets") %>% 
+  filter(!is.na(trendscoarse)) %>% View()
 
 # PARTNER roll up ----------------------------------------------------
 
@@ -150,7 +176,7 @@ df_dp_mech %>%
                                   ageasentered %in% c("15-24", "25-34", "35-49", "50+") ~ "15+",
                                   TRUE ~ ageasentered)) %>% 
   group_by(fiscal_year, indicator,trendscoarse
-          , funding_agency, prime_partner_name, mech_code) %>% 
+           , funding_agency, prime_partner_name, mech_code) %>% 
   summarise(across(c(targets, cumulative), sum, na.rm = TRUE)) %>% 
   ungroup() %>% View()
 
