@@ -25,7 +25,7 @@ library(selfdestructin5)
 # SI specific paths/functions  
 load_secrets()
 merdata <- file.path(glamr::si_path("path_msd"))
-file_path <- return_latest(folderpath = merdata, pattern = "MER_Structured_Datasets_PSNU_IM_FY21-23_20230512_v1_1_Mozambique")
+file_path <- return_latest(folderpath = merdata, pattern = "MER_Structured_Datasets_PSNU_IM_FY21-24_20230811_v1_1_Mozambique")
 
 # Grab metadata
 get_metadata(file_path)
@@ -114,20 +114,20 @@ mdb_tbl  <- reshape_mdb_df(mdb_df, metadata$curr_pd)
 mdb_df_tx    <- make_mdb_tx_df(df_genie)
 mdb_tbl_tx   <- reshape_mdb_tx_df(mdb_df_tx, metadata$curr_pd)
 
-legend_chunk_q2 <- gt::md(glue::glue("Legend: Cumulative <img src= '{legend_q2}' style='height:15px;'>    &emsp;
+legend_chunk_q3 <- gt::md(glue::glue("Legend: Cumulative <img src= '{legend_q3}' style='height:15px;'>    &emsp;
                                        Snapshot (TX_CURR) <img src= '{legend_snapshot}' style='height:15px;'> "))  
 
 mdb_tbl %>% 
   filter(indicator %ni% c("GEND_GBV", "KP_PREV", "TB_PREV")) %>%
   create_mdb(ou = "Mozambique", type = "main", metadata$curr_pd, metadata$source,
-             legend = legend_chunk_q2) %>% 
+             legend = legend_chunk_q3) %>% 
   shrink_rows() %>% 
   cols_width(
     indicator2 ~ px(200),
     contains("achv") ~ px(5),
     contains("present_z") ~ px(10)
   ) %>% 
-  gtsave_extra(path = "Images", filename = glue::glue("Mozambique_{metadata$curr_pd}_mdb_main_AMARA.png"))  
+  gtsave_extra(path = "Images", filename = glue::glue("Mozambique_{metadata$curr_pd}_mdb_main.png"))  
 
 
 create_mdb(mdb_tbl_tx, ou = "Mozambique", type = "treatment", metadata$curr_pd, metadata$source) %>% 
@@ -136,13 +136,13 @@ create_mdb(mdb_tbl_tx, ou = "Mozambique", type = "treatment", metadata$curr_pd, 
   shrink_rows() %>% 
   tab_source_note(
     source_note = md("**TX_CURR NOTE:** South Africa has no MMD program and has been excluded from TX_CURR and MMMD calculations")
-  ) %>% 
+  ) %>%
   gtsave_extra(., path = "Images", filename = glue::glue("{metadata$curr_pd}_Mozambique_MMD_VL_MD.png"))  
 
 # Partner Tables ============================================================================
 
 # Loop over function and create tables for each of the main C&T mechs
-mech_list <- c(82075, 17413, 82086, 17399)
+mech_list <- c(70212, 160472)
 map(mech_list, ~mk_ptr_tbl(df_genie, .x))
 
 
