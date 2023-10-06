@@ -19,6 +19,8 @@
   library(glue)
   library(readxl)
   library(googlesheets4)
+  library(gt)
+  library(gtExtras)
   
 
 # GLOBAL VARIABLES --------------------------------------------------------
@@ -30,15 +32,15 @@
 # IMPORT ------------------------------------------------------------------
   
  file_path <-  data_folder %>% 
-    return_latest("INSIDA 2021 Results Tables_PEPFAR")
+    return_latest("INSIDA 2021 - Results Tables")
   
  readxl::excel_sheets(file_path) 
  
- xl.read.file(file_path, password = "COP23.MZ", xl.sheet = "5.2", top.left.cell = "A3", na = "NA")
+# xl.read.file(file_path, password = "COP23.MZ", xl.sheet = "5.2", top.left.cell = "A3", na = "NA")
  
  
 
-# 5.1 INCIDENCE TABLES ----------------------------------------------------------
+# 5.1 INCIDENCE TABLES FUNCTIONS ----------------------------------------------------------
 
  grab_gender <- function(gender) {
    
@@ -151,7 +153,7 @@ df_5_1_A_final <- bind_rows(df_male_5_1_A, df_female_5_1_A, df_total_5_1_A)
 
 #confidence intervals not calculating
 df_5_2_final <- readxl::read_excel(file_path, sheet = "5.2", range = "A3:F10") %>% 
-  select(1:2, 5) %>%  #add in CIs if they calculate correctly
+  select(1:3, 5:6) %>%  #add in CIs if they calculate correctly
   mutate(`People living with HIV1` = str_remove_all(`People living with HIV1`, ","),
          `Number of new infections per year` = str_remove_all(`Number of new infections per year`, ",")) %>% 
   pivot_longer(cols = -c("Age"), names_to = "indicator", values_to = "value") %>% 
@@ -243,7 +245,7 @@ munge_ch6 <- function(gender, sheet_name) {
    mutate(value = str_remove_all(value, ","),
           value = as.numeric(value),
           source = glue("Table {sheet_name}"),
-          sex = gend,
+          sex = gender,
           indic_type = case_when(str_detect(indicator, "percentage") ~ "Percent",
                                  str_detect(indicator, "number") ~ "Number"),
           indicator = case_when(str_detect(indicator, "percentage") ~ "Percent HIV Positive",
@@ -275,6 +277,8 @@ chapter_6_age_sex <- bind_rows(
   
  write_csv(chapter_6_demo, "Dataout/PHIA_Ch6_Prev_Demographics_Tables.csv")
  write_csv(chapter_6_age_sex, "Dataout/PHIA_Ch6_Prev_AgeSex_Tables.csv")
+ 
+ #pop pyramid for HIV prev by age/sex
  
  # 9.1 95s TABLES ----------------------------------------------------------
  
@@ -383,5 +387,84 @@ chapter_6_age_sex <- bind_rows(
  
    
  
- # working code ------------------------------------------------------------
+ # Ch 7 HIV Self-reported testing  ------------------------------------------------------------
  
+ df_dhs <- data_folder %>% 
+   return_latest("dhs_2022_hiv_datatable") %>% 
+   read_excel()
+ 
+ munge_ch7 <- function(filepath, gender, pop) {
+   
+   #specify gender
+   if(gender == "Male") {
+     sheetname <<- "7.1.A"
+   } else if (gender == "Female") {
+     sheetname <<- "7.1.B"
+   }
+   
+   df <- readxl::read_excel(file_path, sheet = sheetname, range = "A3:H62") 
+   
+   #Specify HIV pop
+   if(pop == "All") {
+     df <- df %>% 
+       select(1:4)
+    
+     pop_indic <<- "Among all"
+     
+   } else if (pop == "HIV Neg") {
+    df <- df %>% 
+       select(c(1, 6:8))
+    
+    pop_indic <<- "Among those who did not report an HIV-positive status"
+   }
+
+   
+   select_vars <- c("type", "characteristic",
+                    "indicator", "indic_type", "age", "sex", "value", "source")
+   
+
+   age_grab <- 
+     filter(df, str_detect(Characteristic, "Total")) %>% 
+     pull(Characteristic)
+   
+   age_band <-  str_split(age_grab, ' ', simplify = TRUE)[,2]
+   
+  df <- df %>%
+  mutate(type = case_when(Characteristic == "Result of INSIDA HIV test" ~ "Result of INSIDA HIV test",
+                          Characteristic == "Residence" ~ "Residence",
+                          Characteristic == "Province" ~ "Province",
+                          Characteristic == "Marital status" ~ "Marital status",
+                          Characteristic == "Education" ~ "Education",
+                          Characteristic == "Wealth quintile" ~ "Wealth quintile",
+                          Characteristic == "Pregnancy status" ~ "Pregnancy status",
+                          Characteristic == "Age" ~ "Age",
+                          str_detect(Characteristic, "Total") ~ "Total")) %>%
+
+  fill(type) %>%
+  janitor::clean_names() %>%
+  filter(type != characteristic) %>%
+  mutate(population = pop_indic) %>%
+  mutate(sex = gender) %>% 
+  rename_with(.cols = 2, ~ "Percentage who had ever received an HIV test") %>% 
+  rename_with(.cols = 3, ~ "Percentage who received an HIV test in the 12 months before the survey") %>% 
+  rename_with(.cols = 4, ~ "Total number tested") %>% 
+  mutate(source = sheetname)
+   # pivot_longer(cols = c(2:4), names_to = "indicator", values_to = "value") %>% 
+   #  mutate(value = as.numeric(value)) %>% 
+   #  mutate(value = value / 100)
+  
+   return(df)
+   
+ }
+ 
+ch7_male_all <- munge_ch7(filepath, gender = "Male", pop = "All") %>% mutate()
+ch7_female_all <- munge_ch7(filepath, gender = "Female", pop = "All")
+ch7_male_neg <- munge_ch7(filepath, gender = "Male", pop = "HIV Neg")
+ch7_female_neg <- munge_ch7(filepath, gender = "Female", pop = "HIV Neg")
+
+ 
+ch7_total <- bind_rows(ch7_female_all, ch7_female_neg, ch7_male_all, ch7_male_neg)
+write_csv(chapter_9_final, "Dataout/PHIA_Ch7_Testing.csv")
+
+
+
