@@ -40,7 +40,7 @@ clean_number <- function(x, digits = 0){
                    TRUE ~ glue("{x}"))
 }
 
-source("Scripts/INSIDA 2021 Analytics/00_utilities") #run source manually if this doesnt work
+source("Scripts/INSIDA 2021 Analytics/00_utilities.R") #run source manually if this doesnt work
 
 # IMPORT ------------------------------------------------------------------
 

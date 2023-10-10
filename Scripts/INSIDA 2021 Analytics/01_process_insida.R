@@ -464,7 +464,7 @@ ch7_female_neg <- munge_ch7(filepath, gender = "Female", pop = "HIV Neg")
 
 
 ch7_total <- bind_rows(ch7_female_all, ch7_female_neg, ch7_male_all, ch7_male_neg)
-write_csv(chapter_9_final, "Dataout/PHIA_Ch7_Testing.csv")
+write_csv(ch7_total, "Dataout/PHIA_Ch7_Testing.csv")
 
 
 
