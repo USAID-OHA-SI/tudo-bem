@@ -7,17 +7,15 @@
 # NOTES:     
 
 # LOCALS & SETUP ============================================================================
-http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
+
   # Libraries
     library(gagglr)
     library(tidyverse)
     library(scales)
-    library(extrafont)
-    library(tidytext)
-    library(patchwork)
-    library(ggtext)
     library(glue)
     library(readxl)
+    library(ggrepel)
+
     
     
   # SI specific paths/functions  
@@ -51,7 +49,7 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(color = scooter, size = 3, alpha = .85) +
       geom_point(shape = 1, size = 3, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu), size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
@@ -75,7 +73,7 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m), color = scooter, alpha = .85) +
       geom_point(aes(size = hei_pos_2m), shape = 1, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu), size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
@@ -103,7 +101,7 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m), color = scooter, alpha = .85) +
       geom_point(aes(size = hei_pos_2m), shape = 1, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu), size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
@@ -136,7 +134,8 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = ovc_color), alpha = .85) +
       geom_point(aes(size = hei_pos_2m), shape = 1, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(ovc_color == denim, denim, grey90k)), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(ovc_color == denim, denim, grey90k)), 
+                               size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
@@ -167,7 +166,8 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = ovc_color), alpha = .85) +
       geom_point(aes(size = hei_pos_2m), shape = 1, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(ovc_color == denim, denim, grey90k)), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(ovc_color == denim, denim, grey90k)), 
+                               size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
@@ -197,7 +197,8 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = kp_color), alpha = .85) +
       geom_point(aes(size = hei_pos_2m), shape = 1, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(kp_color == denim, denim, grey90k)), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(kp_color == denim, denim, grey90k)), 
+                               size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
@@ -228,7 +229,8 @@ http://127.0.0.1:29739/graphics/plot_zoom_png?width=1459&height=898
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = kp_color), alpha = .85) +
       geom_point(aes(size = hei_pos_2m), shape = 1, color = "black") +
-      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(kp_color == denim, denim, grey90k)), size = 8/.pt, family = "Source Sans Pro") +
+      ggrepel::geom_text_repel(aes(label = psnu, color = ifelse(kp_color == denim, denim, grey90k)), 
+                               size = 8/.pt, family = "Source Sans Pro", seed = 42) +
       scale_x_continuous(labels = percent, lim = c(.5, 1.3), breaks = seq(.5, 1.3, .1)) +
       scale_y_continuous(labels = percent, lim = c(-0.0, 0.05)) +
       si_style() +
