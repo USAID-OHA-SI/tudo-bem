@@ -40,11 +40,17 @@
 # VIZ ============================================================================
 
   # Base plot  
+  # NOTE: Not using geom_rect as it's replicated each time for each data point.
+  # Use annotate as it's only rendered 1 time. 
+    
     df %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months)) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(color = scooter, size = 3, alpha = .85) +
@@ -66,9 +72,12 @@
     # Request: different sized bubbles based on number of HEI_POS (N) by 2 mo of age 
     df %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months, )) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m), color = scooter, alpha = .85) +
@@ -94,9 +103,12 @@
       )) %>% 
       filter(!is.na(hei_pos_2m)) %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months, )) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m), color = scooter, alpha = .85) +
@@ -110,7 +122,7 @@
       labs(x = "EID 2 mo testing coverage", y = "HEI positivity by 2 mo of age", 
            title = "Relationship between EID 2 mo coverage and proxy positivity by PSNU",
            subtitle = "USAID Mozambique FY23Q3 Cumulative",
-           caption = "Source: USAID Tableau Server XX Workbook, 2023-11-13") +
+           caption = "Source: USAID Tableau Server PMTCT Workbook, 2023-11-13") +
       guides(size = guide_legend(title = "HEI Positive (numerator) 2 months of age"))
     si_save("Images/MZB_eid_testing_hei_pos_scatter_plot1_alt.png")
     
@@ -127,9 +139,12 @@
       )) %>% 
       filter(!is.na(hei_pos_2m)) %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months, color = ovc_color)) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), color = NA, fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = ovc_color), alpha = .85) +
@@ -143,7 +158,7 @@
       labs(x = "EID 2 mo testing coverage", y = "HEI positivity by 2 mo of age", 
            title = "Relationship between EID 2 mo coverage and proxy positivity by PSNU",
            subtitle = "USAID Mozambique FY23Q3 Cumulative | OVC Supported PSNUs in Blue",
-           caption = "Source: USAID Tableau Server XX Workbook, 2023-11-13") +
+           caption = "Source: USAID Tableau Server PMTCT Workbook, 2023-11-13") +
       guides(size = guide_legend(title = "HEI Positive (numerator) 2 months of age"))
     si_save("Images/MZB_eid_testing_hei_pos_scatter_plot2.png")
     
@@ -159,9 +174,12 @@
       )) %>% 
       filter(!is.na(hei_pos_2m)) %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months, color = ovc_color)) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), color = NA, fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = ovc_color), alpha = .85) +
@@ -176,7 +194,7 @@
       labs(x = "EID 2 mo testing coverage", y = "HEI positivity by 2 mo of age", 
            title = "Relationship between EID 2 mo coverage and proxy positivity by PSNU",
            subtitle = "USAID Mozambique FY23Q3 Cumulative | OVC Supported PSNUs in Blue",
-           caption = "Source: USAID Tableau Server XX Workbook, 2023-11-13") +
+           caption = "Source: USAID Tableau Server PMTCT Workbook, 2023-11-13") +
       guides(size = guide_legend(title = "HEI Positive (numerator) 2 months of age"))
     si_save("Images/MZB_eid_testing_hei_pos_scatter_plot2_alt.png")
 
@@ -190,9 +208,12 @@
       ) %>%  
       filter(!is.na(hei_pos_2m)) %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months, color = ovc_color)) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), color = NA, fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = kp_color), alpha = .85) +
@@ -206,7 +227,7 @@
       labs(x = "EID 2 mo testing coverage", y = "HEI positivity by 2 mo of age", 
            title = "Relationship between EID 2 mo coverage and proxy positivity by PSNU",
            subtitle = "USAID Mozambique FY23Q3 Cumulative | KP Supported PSNU in Orange",
-           caption = "Source: USAID Tableau Server XX Workbook, 2023-11-13") +
+           caption = "Source: USAID Tableau Server PMTCT Workbook, 2023-11-13") +
       guides(size = guide_legend(title = "HEI Positive (numerator) 2 months of age"))
     si_save("Images/MZB_eid_testing_hei_pos_scatter_plot3.png")
     
@@ -222,9 +243,12 @@
       kp_label = fct_relevel(kp_label, c("Non-KP Supported PSNU", "KP Supported PSNU"))) %>% 
       filter(!is.na(hei_pos_2m)) %>% 
       ggplot(aes(x = eid_testing_coverage_2m, y = proxy_pos_rate_hei_pos_2_months, color = ovc_color)) +
-      geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), color = NA, fill = grey10k, alpha = 0.05) +
-      geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), color = NA, fill = grey20k, alpha = 0.05) +
+      annotate("rect", xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf, fill = grey10k, alpha = 0.550) +
+      annotate("rect", xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf, fill = grey10k, alpha = 0.5) +
+      annotate("rect", xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf, fill = grey20k, alpha = 0.5) +
+      # geom_rect(aes(xmin = 0.95, xmax = Inf, ymin = 0, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = 0.5, xmax = 0.95, ymin = 0.02, ymax = Inf), fill = grey10k, alpha = 0.05) +
+      # geom_rect(aes(xmin = .95, xmax = Inf, ymin = 0.02, ymax = Inf), fill = grey20k, alpha = 0.05) +
       geom_vline(xintercept = 0.95, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_hline(yintercept = 0.02, linetype = "dotted", linewidth = .5, color = grey80k) +
       geom_point(aes(size = hei_pos_2m, color = kp_color), alpha = .85) +
@@ -239,7 +263,7 @@
       labs(x = "EID 2 mo testing coverage", y = "HEI positivity by 2 mo of age", 
            title = "Relationship between EID 2 mo coverage and proxy positivity by PSNU",
            subtitle = "USAID Mozambique FY23Q3 Cumulative | KP Supported PSNU in Orange",
-           caption = "Source: USAID Tableau Server XX Workbook, 2023-11-13") +
+           caption = "Source: USAID Tableau Server PMTCT Workbook, 2023-11-13") +
       guides(size = guide_legend(title = "HEI Positive (numerator) 2 months of age"))
     si_save("Images/MZB_eid_testing_hei_pos_scatter_plot3_alt.png")
 
