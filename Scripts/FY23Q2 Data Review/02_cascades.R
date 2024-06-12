@@ -1,11 +1,10 @@
 # PROJECT: Here-it-goes-again-reprise
 # PURPOSE: Analysis of FY23Q2 data for cascade plots
-# AUTHOR: Tim Essam | SI
+# AUTHOR: K. Srikanth | SI
 # REF ID:   3067f005
 # LICENSE: MIT
 # DATE: 2023-05-11
-# NOTES: Tim Essam | SI
-
+# UPDATED: 2024-06-12
 
 # LOCALS & SETUP ============================================================================
 
@@ -43,25 +42,36 @@ ref_id <- "3067f005"
 # SI specific paths/functions  
 load_secrets()
 merdata <- file.path(glamr::si_path("path_msd"))
-file_path <- return_latest(folderpath = merdata, pattern = "MER_Structured_Datasets_PSNU_IM_FY21-23_20230512_v1_1_Mozambique")
+file_path <- return_latest(folderpath = merdata, pattern = "PSNU_IM_FY22.*South Africa")
 
 df_msd <- read_psd(file_path) 
 
 df_msd <- df_msd  %>% 
   clean_agency()
 
+disag_peds <- c("Modality/Age Aggregated/Sex/Result", "Modality/Age/Sex/Result","Age/Sex/HIVStatus",
+                "Age/Sex/CD4/HIVStatus","Age/Sex/Indication/HIVStatus")
+
+metadata <- get_metadata(file_path)
+
+df_msd %>% 
+  filter(fiscal_year == 2024,
+         funding_agency == "USAID", 
+         indicator == "HTS_TST_POS",
+         standardizeddisaggregate == "Modality/Age/Sex/Result") %>% 
+  count(fiscal_year, indicator, sex, wt = qtr2)
 # CREATE USAID CASCADE ============================================================================
 
 #  USING DEV VERSION to get around TX_CURR_LAG2 missing
 
 # All of PEPFAR MOZ cascade
-return_cascade(df_msd, 1) %>% prinf()
+return_cascade(df_msd %>% filter(funding_agency == "USAID"), 1) %>% prinf()
 
 # Generate plots for all agencies
 batch_cascade_plot(df_msd, imgpath = "Images/Cascade/MOZ_PEPFAR", imgtype = ".png")
 
 batch_cascade_plot(df_msd %>% filter(funding_agency == "USAID"), 
-                   imgpath = "Images/Cascade/USAID", imgtype = ".png")
+                   imgpath = "Graphics/Cascade", imgtype = ".SVG")
 
 # MECHANISM CASCADES ============================================================================
 
